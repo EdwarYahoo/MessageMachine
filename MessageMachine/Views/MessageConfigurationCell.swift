@@ -9,6 +9,13 @@ import UIKit
 
 class MessageConfigurationCell: UITableViewCell {
 
+    @IBOutlet weak var lblCategory: UILabel!
+    @IBOutlet weak var lblFrequency: UILabel!
+    @IBOutlet weak var lblMessage: UILabel!
+    @IBOutlet weak var lblSendTo: UILabel!
+    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

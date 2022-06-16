@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct Message {
+    let sender: String
+    let date: Double
+    let body: String
+    let receiver: String
+}

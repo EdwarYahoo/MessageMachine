@@ -11,6 +11,10 @@ class WelcomeViewController: UIViewController {
 
     @IBOutlet weak var titleLabel: UILabel!
     
+    //unwind segue for logouts across the app
+    @IBAction func unwindSegue(_ sender: UIStoryboardSegue){
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden=true
