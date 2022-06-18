@@ -5,6 +5,6 @@ target 'MessageMachine' do
   use_frameworks! :linkage => :static
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
-  
+  pod 'SwipeCellKit'
 end
 

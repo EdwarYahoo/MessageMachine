@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SwipeCellKit
 
-class MessageConfigurationCell: UITableViewCell {
+class MessageConfigurationCell: SwipeTableViewCell {
 
     @IBOutlet weak var lblCategory: UILabel!
     @IBOutlet weak var lblFrequency: UILabel!

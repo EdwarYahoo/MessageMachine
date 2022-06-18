@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import SwipeCellKit
 
 class MessageConfigurationController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -23,7 +24,6 @@ class MessageConfigurationController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         title = K.appMessageConfigurationTitle
-        //formatter.dateFormat = K.dateFormat
         
         
         navigationItem.hidesBackButton = true
@@ -68,33 +68,18 @@ class MessageConfigurationController: UIViewController {
             }
         }
     }
-}
-
-
-
-
-extension MessageConfigurationController: UITableViewDataSource, UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messageConfiguration.count
-    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let message = messageConfiguration[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as! MessageConfigurationCell
-        
-        cell.lblCategory.text = K.FStore.MessageConfiguration.categories[message.category]
-        cell.lblMessage.text = message.message
-        cell.lblFrequency.text = String(message.frequency)
-        cell.lblSendTo.text = message.sendTo.joined(separator: K.sendToSeparator)
-        return cell
-        
-    }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            performSegue(withIdentifier: K.Segues.messageConfigurationDetail, sender: self)
-            tableView.deselectRow(at: indexPath, animated: true)
-        
+    func deleteMessage(_ docId: String){
+        messageConfiguration.removeAll{ $0.docId == docId }
+        db.collection(K.FStore.MessageConfiguration.collectionName).document(docId).delete() { err in
+            if let err = err {
+                print("\(K.errorMsgDeletingData)\(err)")
+            } else {
+                print(K.successMsgDeletingData)
+            }
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -104,4 +89,63 @@ extension MessageConfigurationController: UITableViewDataSource, UITableViewDele
             destinationVC.messageConfiguration = messageConfiguration[indexPath.row]
         }
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messageConfiguration.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let message = messageConfiguration[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as! MessageConfigurationCell
+        cell.delegate = self
+        cell.lblCategory.text = K.FStore.MessageConfiguration.categories[message.category]
+        cell.lblMessage.text = message.message
+        cell.lblFrequency.text = String(message.frequency)
+        cell.lblSendTo.text = message.sendTo.joined(separator: K.sendToSeparator)
+        return cell
+        
+    }
+}
+
+
+
+//MARK: UITableViewDelegate
+
+extension MessageConfigurationController: UITableViewDataSource, UITableViewDelegate{
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            performSegue(withIdentifier: K.Segues.messageConfigurationDetail, sender: self)
+            tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+//MARK: SwipeTableViewCellDelegate
+
+extension MessageConfigurationController: SwipeTableViewCellDelegate{
+   
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+            self.deleteMessage(self.messageConfiguration[indexPath.row].docId)
+        }
+        // customize the action appearance
+        deleteAction.image = UIImage(named: K.cellSwipeDeleteIcon)
+        return [deleteAction]
+    }
+    
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructive
+        options.transitionStyle = .border
+        return options
+    }
+    
 }

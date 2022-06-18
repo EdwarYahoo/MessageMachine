@@ -5,6 +5,8 @@ struct K {
     static let cellIdentifier = "ReusableCell"
     static let cellNibNameMessage = "MessageCell"
     static let cellNibNameMessageConfiguration = "MessageConfigurationCell"
+    static let cellSwipeDeleteLabel = "Delete"
+    static let cellSwipeDeleteIcon = "delete-icon"
     static let registerSegue = "RegisterToChat"
     
     static let dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -17,6 +19,7 @@ struct K {
     static let alertButtonLabel = "Ok"
     
     static let errorMsgSavingData = "There was an issue saving data: "
+    static let errorMsgDeletingData = "There was an issue removing data: "
     static let errorMsgSignOut = "Error signing out: %@"
     static let errorMsgGetDocument = "Error getting documents: "
     static let errorMsgEmptyField = "Required"
@@ -25,6 +28,9 @@ struct K {
     static let errorMsgMaxNumberOfReceivers = "You reached the maximum number of receivers"
     static let errorMsgRepeatedReceiver = "The receiver is already included"
     static let errorMsgDocuments = "Error getting documents: "
+    
+    static let successMsgDeletingData = "Document successfully removed!"
+    
     
     
     static let alphaNumericValues = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
